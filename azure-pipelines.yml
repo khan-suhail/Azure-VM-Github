@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'utkloud-service-connection-new'
+    KeyVaultName: 'utkkloudkeyvault'
+    SecretsFilter: 'localadmin'
+    RunAsPreJob: false
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'utkloud-service-connection-new'
+    subscriptionId: '9821fb9a-f6bc-4c2c-b4d1-6714c26ed441'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'vmviaADO'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'vmtemplate.json'
+    csmParametersFile: 'parametersFile.json'
+    overrideParameters: '-adminPassword $(localadmin)'
+    deploymentMode: 'Incremental'
+    deploymentName: 'TemplateDeploy'
