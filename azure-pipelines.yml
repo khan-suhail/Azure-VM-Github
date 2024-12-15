@@ -12,8 +12,8 @@ pool:
 steps:
 - task: AzureKeyVault@2
   inputs:
-    azureSubscription: 'utkloud-service-connection-new'
-    KeyVaultName: 'utkkloudkeyvault'
+    azureSubscription: 'github-utkloudcorrect'
+    KeyVaultName: 'utkkloudkeyvault1'
     SecretsFilter: 'localadmin'
     RunAsPreJob: false
 
